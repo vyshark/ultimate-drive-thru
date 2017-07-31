@@ -1,16 +1,16 @@
-from builtins import print
 print("INSTRUCTIONS: \n 1) Be clear \n 2) Mention Quantity, even for suborders \n 3) Avoid Repeating name for suborder")
-order= input("what do you want")
-order=order.split()
+order = input("what do you want")
+order = order.split()
 print(order)
-burger= ["mcaloo", "mcchicken"]                             #burgers
+burger = ["mcaloo", "mcchicken"]                             #burgers
 burgerext= ["cheese", "lettuce", "kethup"]                  #burger extras
-drinks= ["Coke", "pepsi", "milkshake"]                      #drinks
-drinksext= ["ice"]                                          #drinks Extras
-suborder={}
-tempso=[]
+drinks = ["Coke", "pepsi", "milkshake"]                      #drinks
+drinksext = ["ice"]                                          #drinks Extras
+suborder = {}
+tempso = []
 od={}
 a=""
+item=""
 qty=0
 flag=0
 subtotal=0
