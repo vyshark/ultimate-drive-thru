@@ -132,10 +132,10 @@ class Ui_MainWindow(object):
     def calltakeorder(self):
         self.logicthread.start()
         self.statusbar.showMessage("hello, what would you like to eat?",5000)
-        self.pushButton.setDisabled()
+        self.pushButton.setEnabled(False)
 
     def logicthreaddone(self,message):
-        self.pushButton.setEnabled()
+        self.pushButton.setEnabled(True)
         self.statusbar.showMessage(message,5000)
 
 class logicthread(QThread):
