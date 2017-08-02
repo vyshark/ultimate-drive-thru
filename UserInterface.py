@@ -69,7 +69,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
         self.label = QtGui.QLabel(self.centralwidget)
         self.label.setText(_fromUtf8(""))
-        self.label.setPixmap(QtGui.QPixmap(_fromUtf8("Desktop/speaker.gif")))
+        self.label.setPixmap(QtGui.QPixmap(_fromUtf8("./icons/speaker.gif")))
         self.label.setObjectName(_fromUtf8("label"))
         self.verticalLayout.addWidget(self.label)
         self.orderherestatic = QtGui.QLabel(self.centralwidget)
@@ -91,7 +91,7 @@ class Ui_MainWindow(object):
         font.setPointSize(12)
         self.pushButton.setFont(font)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(_fromUtf8("Desktop/speak.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8("./icons/speak.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton.setIcon(icon)
         self.pushButton.setIconSize(QtCore.QSize(20, 20))
         self.pushButton.setFlat(False)
@@ -117,7 +117,7 @@ class Ui_MainWindow(object):
         self.stackedWidget.setCurrentIndex(1)
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.calltakeorder)   #BUTTON CLICK ACTION
         self.logicthread=logicthread()                                                                       #INITIATING THREAD
-        self.connect(self.logicthread,SIGNAL("logicthreaddone(QString)"),self.logicthreaddone,Qt.DirectConnection)  #Connecting to Custom Signal->Slot
+        QtCore.QObject.connect(self.logicthread,SIGNAL("logicthreaddone(QString)"),self.logicthreaddone,Qt.DirectConnection)  #Connecting to Custom Signal->Slot
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
