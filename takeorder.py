@@ -22,7 +22,7 @@ def takeorderfunction():
     for k,v in enumerate(order):
         order[k]=str(text2num.text2num(v))
     print(order)          #remove after testing
-    message="You said "+order
+    message="You said "+ "".join(order)
     makelist.makeorder(order)
     '''except sr.UnknownValueError:
        print("Oops! Didn't catch that")

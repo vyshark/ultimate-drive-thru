@@ -1,7 +1,9 @@
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
+from submenu import Ui_Dialog
 from takeorder import takeorderfunction
+import pymysql
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
@@ -20,6 +22,9 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
         MainWindow.resize(744, 469)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8("./icons/mcdonalds.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        MainWindow.setWindowIcon(icon)
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.horizontalLayout = QtGui.QHBoxLayout(self.centralwidget)
@@ -89,20 +94,75 @@ class Ui_MainWindow(object):
         self.statusbar.setObjectName(_fromUtf8("statusbar"))
         MainWindow.setStatusBar(self.statusbar)
         self.actionDatabase_Config = QtGui.QAction(MainWindow)
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap(_fromUtf8("./icons/action-db-icon.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        self.actionDatabase_Config.setIcon(icon2)
         self.actionDatabase_Config.setObjectName(_fromUtf8("actionDatabase_Config"))
+        self.actionRestart = QtGui.QAction(MainWindow)
+        icon3 = QtGui.QIcon()
+        icon3.addPixmap(QtGui.QPixmap(_fromUtf8("./icons/restart.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        self.actionRestart.setIcon(icon3)
+        self.actionRestart.setObjectName(_fromUtf8("actionRestart"))
         self.menuActions.addAction(self.actionDatabase_Config)
+        self.menuActions.addAction(self.actionRestart)
         self.menubar.addAction(self.menuActions.menuAction())
 
         self.retranslateUi(MainWindow)
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.calltakeorder)   #BUTTON CLICK ACTION
-        self.logicthread=logicthread()                                                                       #INITIATING THREAD
+        QtCore.QObject.connect(self.actionDatabase_Config,QtCore.SIGNAL("activated()"),self.test)
+        self.logicthread=logicthread()  
+        QtCore.QObject.connect(self.actionRestart, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.repaint)                                                                     #INITIATING THREAD
         QtCore.QObject.connect(self.logicthread,SIGNAL("logicthreaddone(QString)"),self.logicthreaddone,Qt.DirectConnection)  #Connecting to Custom Signal->Slot
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        #submenu
+        self.Dialog = QtGui.QDialog()
+        ui = Ui_Dialog()
+        ui.setupUi(self.Dialog)
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
-        themenu="hellodarkness my old friend"
-        self.menu.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+
+        notfound=False
+        creds=[]
+        try:
+            config=open('.dbconfig','r').read()
+            for i in config.splitlines():
+                creds.append(i)
+
+        except FileNotFoundError:
+            notfound=True
+
+        if(notfound):
+            self.statusbar.setStyleSheet("color:red")
+            self.statusbar.showMessage("NO DATABASE SETTINGS FOUND!",100000000)
+            self.pushButton.setEnabled(False)
+            self.messagebox.setText("Go to Action>Database Config> and enter your database credentials and restart")
+        else:
+            con=pymysql.connect(host=creds[0],user=creds[1],password=creds[2],db='ultimate_drive_thru')
+            try:
+                con
+            except NameError:
+                self.messagebox.setText("ummmmm...")
+            else:
+                a=con.cursor()
+                a.execute('select * from type')
+                types = a.fetchall()
+                a.execute('select typeid,item,price from Menu')
+                menu = a.fetchall()
+                answer = '<section class="menu-panel"><p class="adorn-brdr-btm menu-time">...............</p><h3>Our Menu</h3><p class="intro">...............</p>'
+                for i, j in types:
+                    answer += '<h4><span>' + j + '</span></h4>'
+                    for a, b, c in menu:
+                        if i == a:
+                            answer += '<ul class="menu-items"><li><strong>'
+                            answer += b.ljust(50, '_') + " " + c + "</strong></li></ul>"
+                    answer += "...</section>"
+                themenu=answer
+
+
+
+
+            self.menu.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
@@ -110,7 +170,7 @@ class Ui_MainWindow(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">"+
                            themenu
                                      +"</p></body></html>", None))
-        self.messagebox.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+            self.messagebox.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
@@ -120,6 +180,7 @@ class Ui_MainWindow(object):
         self.pushButton.setText(_translate("MainWindow", "Place Order", None))
         self.menuActions.setTitle(_translate("MainWindow", "Actions", None))
         self.actionDatabase_Config.setText(_translate("MainWindow", "Database Config", None))
+        self.actionRestart.setText(_translate("MainWindow", "Restart", None))
 
     def calltakeorder(self):
         self.logicthread.start()
@@ -129,6 +190,8 @@ class Ui_MainWindow(object):
     def logicthreaddone(self,message):
         self.pushButton.setEnabled(True)
         self.statusbar.showMessage(message,5000)
+    def test(self):
+        self.Dialog.show()
 
 class logicthread(QThread):
     def __init__(self,parent=None):
