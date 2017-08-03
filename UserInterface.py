@@ -16,54 +16,34 @@ except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
 
-
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(744, 414)
+        MainWindow.resize(744, 469)
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.horizontalLayout = QtGui.QHBoxLayout(self.centralwidget)
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
-        self.stackedWidget = QtGui.QStackedWidget(self.centralwidget)
-        self.stackedWidget.setObjectName(_fromUtf8("stackedWidget"))
-        self.page = QtGui.QWidget()
-        self.page.setObjectName(_fromUtf8("page"))
-        self.gridLayout = QtGui.QGridLayout(self.page)
-        self.gridLayout.setMargin(0)
-        self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
-        self.verticalLayout_Burgers = QtGui.QVBoxLayout()
-        self.verticalLayout_Burgers.setObjectName(_fromUtf8("verticalLayout_Burgers"))
-        self.label_Burgers = QtGui.QLabel(self.page)
-        self.label_Burgers.setObjectName(_fromUtf8("label_Burgers"))
-        self.verticalLayout_Burgers.addWidget(self.label_Burgers)
-        self.tableWidget_Burgers = QtGui.QTableWidget(self.page)
-        self.tableWidget_Burgers.setAlternatingRowColors(True)
-        self.tableWidget_Burgers.setColumnCount(2)
-        self.tableWidget_Burgers.setObjectName(_fromUtf8("tableWidget_Burgers"))
-        self.tableWidget_Burgers.setRowCount(0)
-        self.verticalLayout_Burgers.addWidget(self.tableWidget_Burgers)
-        self.gridLayout.addLayout(self.verticalLayout_Burgers, 0, 0, 1, 1)
-        self.stackedWidget.addWidget(self.page)
-        self.page_2 = QtGui.QWidget()
-        self.page_2.setObjectName(_fromUtf8("page_2"))
-        self.gridLayout_2 = QtGui.QGridLayout(self.page_2)
-        self.gridLayout_2.setMargin(0)
-        self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
-        self.verticalLayout_2 = QtGui.QVBoxLayout()
+        self.scrollArea = QtGui.QScrollArea(self.centralwidget)
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollArea.setObjectName(_fromUtf8("scrollArea"))
+        self.scrollAreaWidgetContents = QtGui.QWidget()
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 446, 411))
+        self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
+        self.verticalLayout_2 = QtGui.QVBoxLayout(self.scrollAreaWidgetContents)
+        self.verticalLayout_2.setMargin(0)
         self.verticalLayout_2.setObjectName(_fromUtf8("verticalLayout_2"))
-        self.label_2 = QtGui.QLabel(self.page_2)
-        self.label_2.setObjectName(_fromUtf8("label_2"))
-        self.verticalLayout_2.addWidget(self.label_2)
-        self.tableWidget = QtGui.QTableWidget(self.page_2)
-        self.tableWidget.setAlternatingRowColors(True)
-        self.tableWidget.setColumnCount(2)
-        self.tableWidget.setObjectName(_fromUtf8("tableWidget"))
-        self.tableWidget.setRowCount(0)
-        self.verticalLayout_2.addWidget(self.tableWidget)
-        self.gridLayout_2.addLayout(self.verticalLayout_2, 0, 0, 1, 1)
-        self.stackedWidget.addWidget(self.page_2)
-        self.horizontalLayout.addWidget(self.stackedWidget)
+        self.menu = QtGui.QTextBrowser(self.scrollAreaWidgetContents)
+        self.menu.setObjectName(_fromUtf8("menu"))
+        self.verticalLayout_2.addWidget(self.menu)
+        self.messagebox = QtGui.QTextEdit(self.scrollAreaWidgetContents)
+        self.messagebox.setMinimumSize(QtCore.QSize(0, 0))
+        self.messagebox.setMaximumSize(QtCore.QSize(16777215, 55))
+        self.messagebox.setReadOnly(True)
+        self.messagebox.setObjectName(_fromUtf8("messagebox"))
+        self.verticalLayout_2.addWidget(self.messagebox)
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+        self.horizontalLayout.addWidget(self.scrollArea)
         self.verticalLayout = QtGui.QVBoxLayout()
         self.verticalLayout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
@@ -114,7 +94,6 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuActions.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(1)
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.calltakeorder)   #BUTTON CLICK ACTION
         self.logicthread=logicthread()                                                                       #INITIATING THREAD
         QtCore.QObject.connect(self.logicthread,SIGNAL("logicthreaddone(QString)"),self.logicthreaddone,Qt.DirectConnection)  #Connecting to Custom Signal->Slot
@@ -122,8 +101,21 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
-        self.label_Burgers.setText(_translate("MainWindow", "<center><font color=\"purple\" size=\"5\"><b>Burgers<b></font></center>", None))
-        self.label_2.setText(_translate("MainWindow", "<center><font color=\"purple\" size=\"5\"><b>Drinks<b></font></center>", None))
+        themenu="hellodarkness my old friend"
+        self.menu.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">"+
+                           themenu
+                                     +"</p></body></html>", None))
+        self.messagebox.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Messagebox initial</p></body></html>", None))
         self.orderherestatic.setText(_translate("MainWindow", "<center><font color=\"red\" size=\"10\"><b>ORDER HERE<b></font></center>", None))
         self.pushButton.setText(_translate("MainWindow", "Place Order", None))
         self.menuActions.setTitle(_translate("MainWindow", "Actions", None))
