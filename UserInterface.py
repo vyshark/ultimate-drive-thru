@@ -4,6 +4,7 @@ from PyQt4.QtGui import *
 from submenu import Ui_Dialog
 from takeorder import takeorderfunction
 import pymysql
+
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
@@ -111,8 +112,8 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.calltakeorder)   #BUTTON CLICK ACTION
         QtCore.QObject.connect(self.actionDatabase_Config,QtCore.SIGNAL("activated()"),self.test)
         self.logicthread=logicthread()  
-        QtCore.QObject.connect(self.actionRestart, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.repaint)                                                                     #INITIATING THREAD
-        QtCore.QObject.connect(self.logicthread,SIGNAL("logicthreaddone(QString)"),self.logicthreaddone,Qt.DirectConnection)  #Connecting to Custom Signal->Slot
+        QtCore.QObject.connect(self.actionRestart, QtCore.SIGNAL(_fromUtf8("activated()")), self.reload)                                                                     #INITIATING THREAD
+        QtCore.QObject.connect(self.logicthread,SIGNAL("logicthreaddone"),self.logicthreaddone)  #Connecting to Custom Signal->Slot
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         #submenu
         self.Dialog = QtGui.QDialog()
@@ -122,15 +123,16 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
 
-        notfound=False
-        creds=[]
+        notfound = False
+        creds = []
         try:
-            config=open('.dbconfig','r').read()
+
+            config = open('.dbconfig', 'r').read()
             for i in config.splitlines():
                 creds.append(i)
 
         except FileNotFoundError:
-            notfound=True
+            notfound = True
 
         if(notfound):
             self.statusbar.setStyleSheet("color:red")
@@ -184,12 +186,21 @@ class Ui_MainWindow(object):
 
     def calltakeorder(self):
         self.logicthread.start()
+
+        self.statusbar.setStyleSheet("color:blue")
         self.statusbar.showMessage("hello, what would you like to eat?",5000)
         self.pushButton.setEnabled(False)
 
+    def reload(self):
+        #working on it
+        self.retranslateUi(MainWindow)
+        self.pushButton.setEnabled(True)
+
+
     def logicthreaddone(self,message):
         self.pushButton.setEnabled(True)
-        self.statusbar.showMessage(message,5000)
+        print(message+"::debug::")
+        self.messagebox.setText(message)
     def test(self):
         self.Dialog.show()
 
@@ -198,7 +209,7 @@ class logicthread(QThread):
         super(logicthread,self).__init__(parent)
     def run(self):
         message=takeorderfunction()
-        self.emit(SIGNAL("logicthreaddone(QString)"),message)
+        self.emit(SIGNAL("logicthreaddone"),message)
 
 if __name__ == "__main__":
     import sys
