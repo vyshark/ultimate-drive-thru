@@ -6,11 +6,11 @@ Ultimate Drive Thru is a python application served as a replacement for traditio
 >St Xavier's College, Mumbai
 
 
-| Name | Roll no. |
-| ------ | ------ |
-| Anay Singh | ------ |
-| Farhan Thakur | 64 |    
-| Vyshak Manikandan | 72 |
+|UID| Name | Roll no. |
+| ------ | ------ | ------ |
+|155058| Anay Singh | 57 |
+|155076| Farhan Thakur | 64 |    
+|155203| Vyshak Manikandan | 72 |
 
 ### Features!
 
@@ -40,12 +40,17 @@ Drive thru uses a few open source projects to work properly
 
 
 ###Installation
-
+We will use cx_Freeze package to create Linux and Windows executable files.
 ####Linux
 
 ```sh
-$git clone coming soon
+$git clone https://github.com/vyshark/ultimate-drive-thru.git
+$cd ultimate-drive-thru
+$python setup.py build
 ```
+A build/exe.linux* folder will be created in the directory and the executable can be found inside.
+U can then move it to your $PATH .
+Additionally u may create .desktop files to launch it from your desktop.
 ####Windows
 ```sh
 $git clone coming soon
