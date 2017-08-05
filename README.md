@@ -31,17 +31,10 @@ Drive thru uses a few open source projects to work properly
 - [PyCharm](https://www.jetbrains.com/pycharm/) - Text Editor of choise. Used under COMPLIMENTARY LICENSE
 
 
-
-
-
-
-
-
-
-
-###Installation
+__Installation__
 We will use cx_Freeze package to create Linux and Windows executable files.
-####Linux
+
+__Linux__
 
 ```sh
 $git clone https://github.com/vyshark/ultimate-drive-thru.git
@@ -51,7 +44,9 @@ $python setup.py build
 A build/exe.linux* folder will be created in the directory and the executable can be found inside.
 U can then move it to your $PATH .
 Additionally u may create .desktop files to launch it from your desktop.
-####Windows
+
+__Windows__
+
 ```sh
 $git clone coming soon
 ```
