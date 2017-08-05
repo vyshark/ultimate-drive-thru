@@ -2,7 +2,9 @@ import speech_recognition as sr
 import pyttsx3
 import makelist
 import text2num
+
 def takeorderfunction():
+
     print("INSTRUCTIONS: \n 1) Be clear \n 2) Mention Quantity, even for suborders \n 3) Avoid Repeating name for suborder")
     '''engine= pyttsx3.init()
     engine.setProperty("voice", "american")

@@ -208,6 +208,7 @@ class logicthread(QThread):
     def __init__(self,parent=None):
         super(logicthread,self).__init__(parent)
     def run(self):
+        #message=""
         message=takeorderfunction()
         self.emit(SIGNAL("logicthreaddone"),message)
 
