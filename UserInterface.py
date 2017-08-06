@@ -3,6 +3,7 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from takeorder import takeorderfunction
 from submenu import Ui_Dialog
+from receipt import Ui_receiptDialog
 import pymysql
 
 try:
@@ -115,11 +116,19 @@ class Ui_MainWindow(object):
         self.logicthread=logicthread()  
         QtCore.QObject.connect(self.actionRestart, QtCore.SIGNAL(_fromUtf8("activated()")), self.reload)                                                                     #INITIATING THREAD
         QtCore.QObject.connect(self.logicthread,SIGNAL("logicthreaddone"),self.logicthreaddone)  #Connecting to Custom Signal->Slot
+        QtCore.QObject.connect(self.logicthread, SIGNAL("logicthreadreceipt"), self.logicthreadreceipt)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         #submenu
         self.Dialog = QtGui.QDialog()
-        ui = Ui_Dialog()
-        ui.setupUi(self.Dialog)
+        d = Ui_Dialog()
+        d.setupUi(self.Dialog)
+
+        #receipt
+
+        self.receipt=QtGui.QDialog()
+        self.r = Ui_receiptDialog()
+
+
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
@@ -205,6 +214,12 @@ class Ui_MainWindow(object):
         self.pushButton.setEnabled(True)
         print(message+"::debug::")
         self.messagebox.setText(message)
+
+    def logicthreadreceipt(self,message):
+        self.r.setupUi(self.receipt,message,self.creds)
+        self.receipt.show()
+
+
     def test(self):
         self.Dialog.show()
 
@@ -214,7 +229,9 @@ class logicthread(QThread):
     def run(self):
         #message=""
         message=takeorderfunction()
-        self.emit(SIGNAL("logicthreaddone"),message)
+        message=message.split('%%')
+        self.emit(SIGNAL("logicthreaddone"),message[0])
+        self.emit(SIGNAL("logicthreadreceipt"), message[1])
 
 if __name__ == "__main__":
     import sys
