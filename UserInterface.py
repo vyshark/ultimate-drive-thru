@@ -1,8 +1,8 @@
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
-from submenu import Ui_Dialog
 from takeorder import takeorderfunction
+from submenu import Ui_Dialog
 import pymysql
 
 try:
@@ -20,6 +20,7 @@ except AttributeError:
         return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_MainWindow(object):
+    creds=[]
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
         MainWindow.resize(744, 469)
@@ -124,13 +125,15 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
 
         notfound = False
-        creds = []
+        #self.creds = []
+        self.creds.insert(2,"")
         try:
-
             config = open('.dbconfig', 'r').read()
             for i in config.splitlines():
-                creds.append(i)
-
+                self.creds.insert(0,i)
+            if self.creds[2] != "":
+                self.creds[2], self.creds[0] = self.creds[0], self.creds[2]
+                self.creds[1], self.creds[0] = self.creds[0], self.creds[1]
         except FileNotFoundError:
             notfound = True
 
@@ -140,7 +143,7 @@ class Ui_MainWindow(object):
             self.pushButton.setEnabled(False)
             self.messagebox.setText("Go to Action>Database Config> and enter your database credentials and restart")
         else:
-            con=pymysql.connect(host=creds[0],user=creds[1],password=creds[2],db='ultimate_drive_thru')
+            con = pymysql.connect(host=self.creds[1], user=self.creds[0], passwd=self.creds[2], db='ultimate_drive_thru')
             try:
                 con
             except NameError:
@@ -185,6 +188,7 @@ class Ui_MainWindow(object):
         self.actionRestart.setText(_translate("MainWindow", "Restart", None))
 
     def calltakeorder(self):
+
         self.logicthread.start()
 
         self.statusbar.setStyleSheet("color:blue")
