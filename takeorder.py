@@ -5,11 +5,26 @@ import text2num
 import pymysql
 import inflect
 
-inf=inflect.engine()
-con = pymysql.connect(host="localhost", user="root", passwd="", db='ultimate_drive_thru')
-cur=con.cursor()
+
 
 def takeorderfunction():
+    notfound = False
+    creds = []
+    creds.insert(2, "")
+    try:
+        config = open('.dbconfig', 'r').read()
+        for i in config.splitlines():
+            creds.insert(0, i)
+        if creds[2] != "":
+            creds[2], creds[0] = creds[0], creds[2]
+            creds[1], creds[0] = creds[0], creds[1]
+    except FileNotFoundError:
+        notfound = True
+
+    if (not notfound):
+        inf = inflect.engine()
+        con = pymysql.connect(host=creds[1], user=creds[0], passwd=creds[2], db='ultimate_drive_thru')
+        cur = con.cursor()
     total=0
     ordqu = []
     finalod =[]

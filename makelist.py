@@ -5,35 +5,49 @@ sandwiches=[]               #sandwiches
 fries=[]                     #fries
 drinks= []                   #drinks
 spacethings=[]
-con = pymysql.connect(host="localhost", user="root", passwd="", db='ultimate_drive_thru')
-cur=con.cursor()
-
-burgerqu="SELECT item FROM Menu WHERE typeid=1"
-swqu="SELECT item FROM Menu WHERE typeid=2"
-friesqu="SELECT item FROM Menu WHERE typeid=3"
-drinksqu="SELECT item FROM Menu WHERE typeid=4"
-extqu="SELECT item FROM Menu WHERE typeid=5"
-allitems={extqu:burgerext,burgerqu:burger,friesqu:fries,drinksqu:drinks,swqu:sandwiches}
+notfound = False
+creds = []
+creds.insert(2, "")
 try:
-    for k,v in allitems.items():
-        cur.execute(k)
-        res=cur.fetchall()
-        for row in res:
-            v.append(str(row[0]).replace(" ","_"))
-            v.append(str(row[0]+'s').replace(" ", "_"))
-            v.append(str(row[0] + 'es').replace(" ", "_"))
-except:
-   print ("Error: unable to fetch data")
+    config = open('.dbconfig', 'r').read()
+    for i in config.splitlines():
+        creds.insert(0, i)
+    if creds[2] != "":
+        creds[2], creds[0] = creds[0], creds[2]
+        creds[1], creds[0] = creds[0], creds[1]
+except FileNotFoundError:
+    notfound = True
+
+if(not notfound):
+
+    try:
+        con = pymysql.connect(host=creds[1], user=creds[0], passwd=creds[2], db='ultimate_drive_thru')
+        cur=con.cursor()
+
+        burgerqu="SELECT item FROM Menu WHERE typeid=1"
+        swqu="SELECT item FROM Menu WHERE typeid=2"
+        friesqu="SELECT item FROM Menu WHERE typeid=3"
+        drinksqu="SELECT item FROM Menu WHERE typeid=4"
+        extqu="SELECT item FROM Menu WHERE typeid=5"
+        allitems={extqu:burgerext,burgerqu:burger,friesqu:fries,drinksqu:drinks,swqu:sandwiches}
+        for k,v in allitems.items():
+            cur.execute(k)
+            res=cur.fetchall()
+            for row in res:
+                v.append(str(row[0]).replace(" ","_"))
+                v.append(str(row[0]+'s').replace(" ", "_"))
+                v.append(str(row[0] + 'es').replace(" ", "_"))
+    except:
+       print ("Error: unable to fetch data")
 
 
-for i in (burger+drinks+burgerext+sandwiches+fries):
-    if "_" in i:
-        i=str(i).replace("_"," ")
-        spacethings.append(str(i))
-suborder,od={},{}
-tempso=[]
-finalod=[]
-
+    for i in (burger+drinks+burgerext+sandwiches+fries):
+        if "_" in i:
+            i=str(i).replace("_"," ")
+            spacethings.append(str(i))
+    suborder,od={},{}
+    tempso=[]
+    finalod=[]
 
 def makeorder(order):
     finalod.clear()
