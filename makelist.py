@@ -141,4 +141,5 @@ def makeorder(order):
                 od.clear()
             item = ord.lower()
             flag=1
+    print(finalod)
     return finalod

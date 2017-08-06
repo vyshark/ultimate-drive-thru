@@ -65,7 +65,8 @@ def takeorderfunction():
             #order=input()                  #remove after testing
             break
         except sr.UnknownValueError:
-            print("Oops! Didn't catch that")
+            engine.say("Oops! Didn't catch that")
+            engine.runAndWait()
             continue
         except sr.RequestError as e:
             mess = "Sorry Service is Unavailible at the moment"
@@ -84,8 +85,8 @@ def takeorderfunction():
     #print(order)          #remove after testing
     mess="You said "+ " ".join(order)
     #print(finalod)
-    finalod=makelist.makeorder(order)
-    print(finalod)
+    finalod.extend(makelist.makeorder(order))
+    print("before anyhting more", finalod)
 
     while True:
         engine.say("Anything more?")
@@ -103,7 +104,8 @@ def takeorderfunction():
                     engine.runAndWait()
                     continue
             except sr.UnknownValueError:
-                print("Oops! Didn't catch that")
+                engine.say("Oops! Didn't catch that")
+                engine.runAndWait()
                 continue
             except sr.RequestError as e:
                 mess = "Sorry Service is Unavailable at the moment"
@@ -116,23 +118,32 @@ def takeorderfunction():
                 with sr.Microphone() as source:  # use the default microphone as the audio source
                     aorder = recog.listen(source)  # recognise order
                 try:
-                    aorder = recog.recognize_google(aorder)
+                    aorder = str(recog.recognize_google(aorder))
                     print("You said " + aorder)  # recognize speech using Google Speech Recognition'''
                     # order=input()                  #remove after testing
                     break
                 except sr.UnknownValueError:
-                    print("Oops! Didn't catch that")
+                    engine.say("Oops! Didn't catch that")
+                    engine.runAndWait()
                     continue
                 except sr.RequestError as e:
                     mess = "Sorry Service is Unavailable at the moment"
                     return mess
-            finalod=finalod+makelist.makeorder(order)
+            aorder = aorder.lower()
+            for word in makelist.spacethings:
+                aorder = aorder.replace(word, word.replace(" ", "_"))
+            aorder = aorder.replace(" a ", " 1 ").replace(" a ", " 1 ")
+            aorder = aorder.split()
+            for k, v in enumerate(aorder):
+                aorder[k] = str(text2num.text2num(str(v).lower()))
+            # print(order)          #remove after testing
+            mess =mess+ " + " + " ".join(aorder)
+            finalod.extend(makelist.makeorder(aorder))
         if add=="no":
             break
 
-
-    print(finalod)
-    engine.say("Do yu like to confirm your order?")
+    print("before confiming" , finalod)
+    engine.say("would yu like to confirm your order?")
     engine.runAndWait()
 
     while True:
@@ -147,14 +158,15 @@ def takeorderfunction():
                 engine.runAndWait()
                 continue
         except sr.UnknownValueError:
-            print("Oops! Didn't catch that")
+            engine.say("Oops! Didn't catch that")
+            engine.runAndWait()
             continue
         except sr.RequestError as e:
-            mess = "Sorry Service is Unavailible at the moment"
+            mess = "Sorry Service is Unavailable at the moment"
             return mess
 
     if confirm=="yes":
-        print(finalod)
+        print("yes")
         #insert into transaction table
         for i in finalod:
             for j in i.split():
@@ -183,7 +195,7 @@ def takeorderfunction():
         cur.execute(qu)
         con.commit()
         TID=int(cur.lastrowid)
-        mess+="%%"+TID
+        mess+="%%"+str(TID)
         for query in ordqu:
             cur.execute(query,(TID))
             con.commit()

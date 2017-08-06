@@ -47,8 +47,9 @@ class Ui_receiptDialog(object):
         QtCore.QMetaObject.connectSlotsByName(receiptDialog)
 
     def retranslateUi(self, receiptDialog):
-        finalreceipt=""   #FARHAN :: this it the string that will be displayed
-        transaction=self.TID  #This is the transaction id
+        total=0
+        x=""
+        transaction=self.TID
 
         receiptDialog.setWindowTitle(_translate("receiptDialog", "Receipt", None))
         self.accept.setText(_translate("receiptDialog", "OK", None))
@@ -57,7 +58,14 @@ class Ui_receiptDialog(object):
 
         #CAN you write your database me se pull karne wala code?
         #TO get that orders in finalreceipt?
-
-        self.receipttext.setText(finalreceipt) #HERE
+        cur=con.cursor()
+        cur.execute("select * from orders where Tid=%s", transaction)
+        finalreceipt=cur.fetchall()
+        head="ORDER ID:"+ str(transaction)
+        for i in finalreceipt:
+            x=x+str(i[2])+" X"+str(i[1])+" ......... "+ str(i[4])+"\n"
+            total=str(total+int(i[4]))
+        final=head+"\n\n\n"+x+"\n\n\nTOTAL:"+total
+        self.receipttext.setText(final)
 
 
