@@ -44,6 +44,7 @@ $python setup.py build
 A build/exe.linux* folder will be created in the directory and the executable can be found inside.
 U can then move it to your $PATH .
 Additionally u may create .desktop files to launch it from your desktop.
+
 __Windows__
 >Install the executable. 
 
