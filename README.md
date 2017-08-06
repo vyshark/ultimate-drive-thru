@@ -30,8 +30,8 @@ Drive thru uses a few open source projects to work properly
 - [PyQt](https://pypi.python.org/pypi/PyQt4) - Provides Python wrapper to use Qt Windowing framework.
 - [PyCharm](https://www.jetbrains.com/pycharm/) - Text Editor of choise. Used under COMPLIMENTARY LICENSE
 
-
 __Installation__
+
 We will use cx_Freeze package to create Linux and Windows executable files.
 
 __Linux__
@@ -44,17 +44,14 @@ $python setup.py build
 A build/exe.linux* folder will be created in the directory and the executable can be found inside.
 U can then move it to your $PATH .
 Additionally u may create .desktop files to launch it from your desktop.
-
 __Windows__
+>Install the executable. 
+
+__Run manually__
 
 ```sh
-$git clone coming soon
+$python UserInterface.py
 ```
-
-
-
-
-
 
 
 **Free Software, Hell Yeah!**
