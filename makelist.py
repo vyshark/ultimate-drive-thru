@@ -36,6 +36,7 @@ finalod=[]
 
 
 def makeorder(order):
+    finalod.clear()
     '''print(burger)
     print(drinks)
     print(fries)

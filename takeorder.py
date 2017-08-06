@@ -8,9 +8,11 @@ import inflect
 inf=inflect.engine()
 con = pymysql.connect(host="localhost", user="root", passwd="", db='ultimate_drive_thru')
 cur=con.cursor()
-ordqu=[]
+
 def takeorderfunction():
     total=0
+    ordqu = []
+    finalod =[]
     print("INSTRUCTIONS: \n 1) Be clear \n 2) Mention Quantity, even for suborders \n 3) Avoid Repeating name for suborder")
     engine= pyttsx3.init()
     engine.setProperty("voice", "american")
@@ -34,6 +36,7 @@ def takeorderfunction():
             order[k]=str(text2num.text2num(str(v).lower()))
         #print(order)          #remove after testing
         mess="You said "+ " ".join(order)
+        print(finalod)
         finalod=makelist.makeorder(order)
         print(finalod)
         #insert into transaction table
