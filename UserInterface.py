@@ -125,12 +125,14 @@ class Ui_MainWindow(object):
 
         notfound = False
         creds = []
+        creds.insert(2,"")
         try:
-
             config = open('.dbconfig', 'r').read()
             for i in config.splitlines():
-                creds.append(i)
-
+                creds.insert(0,i)
+            if creds[2] != "":
+                creds[2], creds[0] = creds[0], creds[2]
+                creds[1], creds[0] = creds[0], creds[1]
         except FileNotFoundError:
             notfound = True
 
@@ -140,7 +142,7 @@ class Ui_MainWindow(object):
             self.pushButton.setEnabled(False)
             self.messagebox.setText("Go to Action>Database Config> and enter your database credentials and restart")
         else:
-            con=pymysql.connect(host=creds[0],user=creds[1],password=creds[2],db='ultimate_drive_thru')
+            con = pymysql.connect(host=creds[1], user=creds[0], passwd=creds[2], db='ultimate_drive_thru')
             try:
                 con
             except NameError:
