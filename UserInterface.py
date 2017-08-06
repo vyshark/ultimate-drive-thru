@@ -116,6 +116,7 @@ class Ui_MainWindow(object):
         self.logicthread=logicthread()  
         QtCore.QObject.connect(self.actionRestart, QtCore.SIGNAL(_fromUtf8("activated()")), self.reload)                                                                     #INITIATING THREAD
         QtCore.QObject.connect(self.logicthread,SIGNAL("logicthreaddone"),self.logicthreaddone)  #Connecting to Custom Signal->Slot
+        QtCore.QObject.connect(self.logicthread, SIGNAL("logicthreadreceipt"), self.logicthreadreceipt)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         #submenu
         self.Dialog = QtGui.QDialog()
