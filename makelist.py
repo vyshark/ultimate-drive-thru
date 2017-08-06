@@ -45,9 +45,10 @@ if(not notfound):
         if "_" in i:
             i=str(i).replace("_"," ")
             spacethings.append(str(i))
-    suborder,od={},{}
-    tempso=[]
-    finalod=[]
+
+suborder,od={},{}
+tempso=[]
+finalod=[]
 
 def makeorder(order):
     finalod.clear()
