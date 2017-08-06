@@ -183,6 +183,7 @@ def takeorderfunction():
         cur.execute(qu)
         con.commit()
         TID=int(cur.lastrowid)
+        mess+="%%"+TID
         for query in ordqu:
             cur.execute(query,(TID))
             con.commit()
