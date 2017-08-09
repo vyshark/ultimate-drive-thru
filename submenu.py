@@ -96,11 +96,18 @@ class Ui_Dialog(object):
         self.label_password.setText(_translate("Dialog", "password", None))
 
     def beforeaccept(self,Dialog):
-        con=pymysql.connect(host=self.line_Host.text(),user=self.line_User.text(),password=self.line_Password.text(),db='ultimate_drive_thru')
+        errormessage=""
+        try:
+            con=pymysql.connect(host=self.line_Host.text(),user=self.line_User.text(),password=self.line_Password.text(),db='ultimate_drive_thru')
+        except pymysql.err.OperationalError:
+            errormessage+="Check your credentials."
+            self.dbstatus.setText("<font color='red'>"+errormessage+"<font>")
+
         try:
             con
         except NameError:
-            self.dbstatus.setText("<font color='red'>Failed to Connect!<font>")
+            errormessage+="<br>Failed to Connect!"
+            self.dbstatus.setText("<font color='red'>"+errormessage+"<font>")
         else:
             try:
                 f=open('.dbconfig','w')
