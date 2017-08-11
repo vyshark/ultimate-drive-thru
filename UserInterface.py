@@ -1,7 +1,7 @@
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
-from takeorder import takeorderfunction
+import takeorder
 from submenu import Ui_Dialog
 from receipt import Ui_receiptDialog
 import pymysql
@@ -212,7 +212,7 @@ class Ui_MainWindow(object):
 
     def logicthreaddone(self,message):
         self.pushButton.setEnabled(True)
-        print(message+"::debug::")
+        print(message)
         self.messagebox.setText(message)
 
     def logicthreadreceipt(self,message):
@@ -228,10 +228,15 @@ class logicthread(QThread):
         super(logicthread,self).__init__(parent)
     def run(self):
         #message=""
-        message=takeorderfunction()
+        finalod, mess, name=takeorder.takeorderfunction()
+        #message=message.split('%%')
+        self.emit(SIGNAL("logicthreaddone"), str(finalod))
+
+        message=takeorder.confirmorder(finalod, mess, name)
         message=message.split('%%')
-        self.emit(SIGNAL("logicthreaddone"),message[0])
         self.emit(SIGNAL("logicthreadreceipt"), message[1])
+
+
 
 if __name__ == "__main__":
     import sys

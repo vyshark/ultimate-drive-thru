@@ -49,6 +49,7 @@ class Ui_receiptDialog(object):
     def retranslateUi(self, receiptDialog):
         total=0
         x=""
+        print("TID",self.TID)
         transaction=self.TID
 
         receiptDialog.setWindowTitle(_translate("receiptDialog", "Receipt", None))
@@ -64,8 +65,8 @@ class Ui_receiptDialog(object):
         head="ORDER ID:"+ str(transaction)
         for i in finalreceipt:
             x=x+str(i[2])+" X"+str(i[1])+" ......... "+ str(i[4])+"\n"
-            total=str(total+int(i[4]))
-        final=head+"\n\n\n"+x+"\n\n\nTOTAL:"+total
+            total=total+int(i[4])
+        final=head+"\n\n\n"+x+"\n\n\nTOTAL:"+str(total)
         self.receipttext.setText(final)
 
 
