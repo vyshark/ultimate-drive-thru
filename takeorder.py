@@ -4,7 +4,13 @@ import makelist
 import text2num
 import pymysql
 import inflect
+
+
 inf = inflect.engine()
+engine = pyttsx3.init()
+engine.setProperty("voice", "american")
+engine.setProperty("rate", "140")
+recog = sr.Recognizer()
 
 notfound = False
 creds = []
@@ -24,14 +30,11 @@ if (not notfound):
     cur = con.cursor()
 
 def takeorderfunction():
-    recog = sr.Recognizer()
-    total=0
-    ordqu = []
+
+
     finalod =[]
     print("INSTRUCTIONS: \n 1) Be clear \n 2) Mention Quantity, even for suborders \n 3) Avoid Repeating name for suborder")
-    engine= pyttsx3.init()
-    engine.setProperty("voice", "american")
-    engine.setProperty("rate", "140")
+
 
 
 
@@ -123,7 +126,7 @@ def takeorderfunction():
                     # order=input()                  #remove after testing
                     break
                 except sr.UnknownValueError:
-                    engine.say("Oops! Didn't catch that")
+                    engine.say("Oops! Didn't catch that. Please try again.")
                     engine.runAndWait()
                     continue
                 except sr.RequestError as e:
@@ -142,6 +145,12 @@ def takeorderfunction():
         if add=="no":
             break
 
+    return finalod, mess, name
+
+
+def confirmorder(finalod, mess, name):
+    ordqu = []
+    total=0
     print("before confiming" , finalod)
     engine.say("would yu like to confirm your order?")
     engine.runAndWait()
@@ -204,4 +213,5 @@ def takeorderfunction():
         engine.runAndWait()
         mess="order cancelled"
         return mess
+    print(mess)
     return mess
