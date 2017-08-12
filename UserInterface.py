@@ -201,7 +201,7 @@ class Ui_MainWindow(object):
         self.logicthread.start()
 
         self.statusbar.setStyleSheet("color:blue")
-        self.statusbar.showMessage("hello, what would you like to eat?",5000)
+        self.statusbar.showMessage("hello, what is your name?",5000)
         self.pushButton.setEnabled(False)
 
     def reload(self):
