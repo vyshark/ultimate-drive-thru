@@ -64,7 +64,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QObject.connect(self.actionConnectdb, QtCore.SIGNAL("activated()"), self.test)
         QtCore.QObject.connect(self.actionReload, QtCore.SIGNAL(_fromUtf8("activated()")), self.reload)
-        QtCore.QObject.connect(self.waitingforconnection, SIGNAL("incoming"), self.reload)
+
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         #submenu
         self.Dialog = QtGui.QDialog()
@@ -72,6 +72,7 @@ class Ui_MainWindow(object):
         d.setupUi(self.Dialog)
         self.waitingforconnection = waitingforconnection()
         self.waitingforconnection.start()
+        QtCore.QObject.connect(self.waitingforconnection, SIGNAL("incoming"), self.reload)
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "ChefSideUI", None))
