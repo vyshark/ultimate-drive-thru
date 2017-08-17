@@ -145,6 +145,7 @@ class Ui_MainWindow(object):
     def reload(self):
         #working on it
         self.tempButton=[]
+        self.creds.clear()
         self.retranslateUi(MainWindow)
 
 class waitingforconnection(QThread):
