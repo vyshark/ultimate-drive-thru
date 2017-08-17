@@ -1,4 +1,6 @@
 from PyQt4 import QtCore, QtGui
+from PyQt4.QtCore import *
+from PyQt4.QtGui import *
 from submenu import Ui_Dialog
 import pymysql
 import functools
@@ -61,11 +63,14 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QObject.connect(self.actionConnectdb, QtCore.SIGNAL("activated()"), self.test)
         QtCore.QObject.connect(self.actionReload, QtCore.SIGNAL(_fromUtf8("activated()")), self.reload)
+        QtCore.QObject.connect(self.waitingforconnection, SIGNAL("incoming"), self.reload)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         #submenu
         self.Dialog = QtGui.QDialog()
         d = Ui_Dialog()
         d.setupUi(self.Dialog)
+        self.waitingforconnection = waitingforconnection()
+        self.waitingforconnection.start()
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "ChefSideUI", None))
@@ -140,6 +145,15 @@ class Ui_MainWindow(object):
         self.tempButton=[]
         self.retranslateUi(MainWindow)
 
+class waitingforconnection(QThread):
+    def __init__(self,parent=None):
+        super(waitingforconnection,self).__init__(parent)
+    def run(self):
+        #FARHAN--
+        #here it will constantly listen for connection.
+        #if conncted==TRUE
+        self.emit(SIGNAL("incoming"))
+        #do that ^
 
 
 if __name__ == "__main__":
