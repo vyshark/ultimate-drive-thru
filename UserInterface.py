@@ -167,18 +167,21 @@ class Ui_MainWindow(object):
                 answer = '<section class="menu-panel"><p class="adorn-brdr-btm menu-time">...............</p><h3>Our Menu</h3><p class="intro">...............</p>'
                 for i, j in types:
                     answer += '<h4><span>' + j + '</span></h4>'
-                    for k, b, c in menu:
-                        if i == k:
+                    for a, b, c in menu:
+                        if i == a:
                             answer += '<ul class="menu-items"><li><strong>'
                             answer += b.ljust(50, '_') + " " + c + "</strong></li></ul>"
                     answer += "...</section>"
                 themenu=answer
 
                 #for today's top item
-                a.execute('select item from orders where DATE(added_on)=CURDATE() group by item order by count(item) desc limit 1')
-                todaystopitem=a.fetchone()
-
-
+                b=con.cursor()
+                b.execute('select item from orders where DATE(added_on)=CURDATE() group by item order by count(item) desc limit 1')
+                todaystopitem=b.fetchone()
+                try:
+                    tti=todaystopitem[0]+" is todays top sold item!"
+                except TypeError:
+                    tti=""
 
             self.menu.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
@@ -194,7 +197,10 @@ class Ui_MainWindow(object):
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:bold; font-style:normal;color:purple;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">"+
-                                               todaystopitem[0]+" is todays top sold item!"
+
+                                               tti
+
+
                                                +"</p></body></html>", None))
         self.orderherestatic.setText(_translate("MainWindow", "<center><font color=\"red\" size=\"10\"><b>ORDER HERE<b></font></center>", None))
         self.pushButton.setText(_translate("MainWindow", "Place Order", None))
@@ -231,7 +237,7 @@ class Ui_MainWindow(object):
 
         s.connect((host, port))
         print(s.recv(1024))
-        s.close
+        s.close()
 
 
     def test(self):

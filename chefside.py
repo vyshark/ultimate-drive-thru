@@ -105,7 +105,7 @@ class Ui_MainWindow(object):
                 self.statusbar.showMessage("Umm", 100000000)
             else:
                 a = self.con.cursor()
-                a.execute('select Tid,item,qty,comments from orders')
+                a.execute("select Tid,item,qty,comments from orders where is_served='0'")
                 orders = a.fetchall()
 
                 for i in reversed(range(self.tableWidget.rowCount())):
@@ -132,7 +132,7 @@ class Ui_MainWindow(object):
     def deletefromdb(self,*args):
         b = self.con.cursor()
         #b.execute('select Tid,item,qty,comments from orders')
-        query="delete from orders where Tid={}".format(args[0])
+        query="update orders set is_served='1' where Tid={}".format(args[0])
         print(query)
         print(type(query))
         b.execute(query)
@@ -163,7 +163,7 @@ class waitingforconnection(QThread):
             c.send('Thank you for connecting'.encode(encoding='utf-8'))
             c.close()
         #if conncted==TRUE
-        self.emit(SIGNAL("incoming"))
+            self.emit(SIGNAL("incoming"))
         #do that ^
 
 
