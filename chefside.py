@@ -152,7 +152,7 @@ class waitingforconnection(QThread):
         super(waitingforconnection,self).__init__(parent)
     def run(self):
         s = socket.socket()
-        host = socket.gethostname()
+        host = "localhost"
         port = 12345
         s.bind((host, port))
 

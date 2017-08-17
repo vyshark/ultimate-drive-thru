@@ -197,7 +197,7 @@ def confirmorder(finalod, mess, name):
                         #print(price)
                     i=str(i).replace(j,"").strip()
             #print("i=",i)
-            ordqu.append("insert into orders values(%s,"+str(qty)+ ",'" +str(z)+"','"+ str(i)+"',"+ str(price)+ ",'','NOW()')")
+            ordqu.append("insert into orders values(%s,"+str(qty)+ ",'" +str(z)+"','"+ str(i)+"',"+ str(price)+ ", 0 , default)")
         #print(ordqu)
         qu = "insert into transactions values(default, '"+ str(name) +"',"+ str(total)+")"
         #print(qu)

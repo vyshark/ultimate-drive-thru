@@ -5,6 +5,7 @@ import takeorder
 from submenu import Ui_Dialog
 from receipt import Ui_receiptDialog
 import pymysql
+import socket
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -167,7 +168,7 @@ class Ui_MainWindow(object):
                 for i, j in types:
                     answer += '<h4><span>' + j + '</span></h4>'
                     for k, b, c in menu:
-                        if i == a:
+                        if i == k:
                             answer += '<ul class="menu-items"><li><strong>'
                             answer += b.ljust(50, '_') + " " + c + "</strong></li></ul>"
                     answer += "...</section>"
@@ -223,9 +224,14 @@ class Ui_MainWindow(object):
         self.r.setupUi(self.receipt,message,self.creds)
         self.pushButton.setEnabled(True)
         self.receipt.show()
-        #FARHAN
-        #--starts here tcp calls to chefside
-        #
+
+        s = socket.socket()
+        host = "localhost"
+        port = 12345
+
+        s.connect((host, port))
+        print(s.recv(1024))
+        s.close
 
 
     def test(self):
