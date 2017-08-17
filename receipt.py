@@ -1,6 +1,5 @@
 from PyQt4 import QtCore, QtGui
 import pymysql
-import socket
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
@@ -67,10 +66,3 @@ class Ui_receiptDialog(object):
         final=head+"\n\n\n"+x+"\n\n\nTOTAL:"+str(total)
         self.receipttext.setText(final)
 
-        s = socket.socket()
-        host = "localhost"
-        port = 12345
-
-        s.connect((host, port))
-        print(s.recv(1024))
-        s.close
