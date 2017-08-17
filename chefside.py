@@ -4,6 +4,7 @@ from PyQt4.QtGui import *
 from submenu import Ui_Dialog
 import pymysql
 import functools
+import socket
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
@@ -149,8 +150,17 @@ class waitingforconnection(QThread):
     def __init__(self,parent=None):
         super(waitingforconnection,self).__init__(parent)
     def run(self):
-        #FARHAN--
-        #here it will constantly listen for connection.
+        s = socket.socket()
+        host = socket.gethostname()
+        port = 12345
+        s.bind((host, port))
+
+        s.listen(5)
+        while True:
+            c, addr = s.accept()
+            print('Got connection from', addr)
+            c.send('Thank you for connecting'.encode(encoding='utf-8'))
+            c.close()
         #if conncted==TRUE
         self.emit(SIGNAL("incoming"))
         #do that ^

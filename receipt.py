@@ -1,6 +1,6 @@
 from PyQt4 import QtCore, QtGui
 import pymysql
-
+import socket
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
@@ -57,8 +57,6 @@ class Ui_receiptDialog(object):
 
         con = pymysql.connect(host=self.creds[1], user=self.creds[0], passwd=self.creds[2], db='ultimate_drive_thru')
 
-        #CAN you write your database me se pull karne wala code?
-        #TO get that orders in finalreceipt?
         cur=con.cursor()
         cur.execute("select * from orders where Tid=%s", transaction)
         finalreceipt=cur.fetchall()
@@ -69,4 +67,10 @@ class Ui_receiptDialog(object):
         final=head+"\n\n\n"+x+"\n\n\nTOTAL:"+str(total)
         self.receipttext.setText(final)
 
+        s = socket.socket()
+        host = "localhost"
+        port = 12345
 
+        s.connect((host, port))
+        print(s.recv(1024))
+        s.close
