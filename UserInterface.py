@@ -225,6 +225,7 @@ class Ui_MainWindow(object):
     def logicthreaddone(self,message):
         print(message)
         self.messagebox.setText(message)
+        self.pushButton.setEnabled(True)
 
     def logicthreadreceipt(self,message):
         self.r.setupUi(self.receipt,message,self.creds)
