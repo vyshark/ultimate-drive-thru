@@ -225,7 +225,7 @@ class Ui_MainWindow(object):
     def logicthreaddone(self,message):
         print(message)
         self.messagebox.setText(message)
-        self.pushButton.setEnabled(True)
+
 
     def logicthreadreceipt(self,message):
         self.r.setupUi(self.receipt,message,self.creds)
@@ -255,7 +255,13 @@ class logicthread(QThread):
 
         message=takeorder.confirmorder(finalod, mess, name)
         message=message.split('%%')
-        self.emit(SIGNAL("logicthreadreceipt"), message[1])
+        try:
+            finmess=message[1]
+            self.emit(SIGNAL("logicthreadreceipt"), finmess)
+        except IndexError:
+            finmess="order cancelled."
+            self.emit(SIGNAL("logicthreaddone"), finmess)
+
 
 
 
