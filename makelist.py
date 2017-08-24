@@ -17,6 +17,8 @@ try:
         creds[1], creds[0] = creds[0], creds[1]
 except FileNotFoundError:
     notfound = True
+except IndexError:
+    notfound=True
 
 if(not notfound):
 

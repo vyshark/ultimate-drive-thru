@@ -6,6 +6,7 @@ from submenu import Ui_Dialog
 from receipt import Ui_receiptDialog
 import pymysql
 import socket
+import os
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -124,10 +125,7 @@ class Ui_MainWindow(object):
         d = Ui_Dialog()
         d.setupUi(self.Dialog)
 
-        #receipt
 
-        self.receipt=QtGui.QDialog()
-        self.r = Ui_receiptDialog()
 
 
 
@@ -137,6 +135,7 @@ class Ui_MainWindow(object):
         notfound = False
         #self.creds = []
         self.creds.insert(2,"")
+        self.dbconfigisempty=False
         try:
             config = open('.dbconfig', 'r').read()
             for i in config.splitlines():
@@ -146,6 +145,8 @@ class Ui_MainWindow(object):
                 self.creds[1], self.creds[0] = self.creds[0], self.creds[1]
         except FileNotFoundError:
             notfound = True
+        except IndexError:
+            self.dbconfigisempty=True
 
         if(notfound):
             self.statusbar.setStyleSheet("color:red")
@@ -153,11 +154,19 @@ class Ui_MainWindow(object):
             self.pushButton.setEnabled(False)
             self.messagebox.setText("Go to Action>Database Config> and enter your database credentials and restart")
         else:
-            con = pymysql.connect(host=self.creds[1], user=self.creds[0], passwd=self.creds[2], db='ultimate_drive_thru')
+            if(self.dbconfigisempty):
+                self.statusbar.setStyleSheet("color:red")
+                self.statusbar.showMessage("There was a problem connecting to database!", 100000000)
+                self.pushButton.setEnabled(False)
+                self.messagebox.setText("Check if database server is running then try again.")
+
+
             try:
-                con
+                con = pymysql.connect(host=self.creds[1], user=self.creds[0], passwd=self.creds[2],db='ultimate_drive_thru')
             except NameError:
                 self.messagebox.setText("ummmmm...")
+            except IndexError:
+                self.dbconfigisempty=True
             else:
                 a=con.cursor()
                 a.execute('select * from type')
@@ -182,14 +191,22 @@ class Ui_MainWindow(object):
                     tti=todaystopitem[0]+" is todays top sold item!"
                 except TypeError:
                     tti=""
+            try:
+                themenu
+            except UnboundLocalError:
+                themenu=""
 
+            try:
+                tti
+            except UnboundLocalError:
+                tti=""
             self.menu.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">"+
-                           themenu
+                          themenu
                                      +"</p></body></html>", None))
             self.messagebox.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
@@ -218,6 +235,11 @@ class Ui_MainWindow(object):
 
     def reload(self):
         #working on it
+        try:
+            os.remove("./.dbconfig.bak")
+        except:
+            print("if not exists then do nothing")
+
         self.retranslateUi(MainWindow)
         self.pushButton.setEnabled(True)
 
@@ -228,9 +250,13 @@ class Ui_MainWindow(object):
 
 
     def logicthreadreceipt(self,message):
-        self.r.setupUi(self.receipt,message,self.creds)
+        #receipt
+
+        receipt=QtGui.QDialog()
+        r = Ui_receiptDialog()
+        r.setupUi(receipt,message,self.creds)
         self.pushButton.setEnabled(True)
-        self.receipt.show()
+        receipt.show()
 
         s = socket.socket()
         host = "localhost"

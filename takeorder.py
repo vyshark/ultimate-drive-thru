@@ -4,7 +4,7 @@ import makelist
 import text2num
 import pymysql
 import inflect
-
+import os
 
 inf = inflect.engine()
 engine = pyttsx3.init()
@@ -24,10 +24,16 @@ try:
         creds[1], creds[0] = creds[0], creds[1]
 except FileNotFoundError:
     notfound = True
+except IndexError:
+    notfound=True
 
 if (not notfound):
-    con = pymysql.connect(host=creds[1], user=creds[0], passwd=creds[2], db='ultimate_drive_thru')
-    cur = con.cursor()
+    try:
+        con = pymysql.connect(host=creds[1], user=creds[0], passwd=creds[2], db='ultimate_drive_thru')
+        cur = con.cursor()
+    except Exception as e:
+        os.rename("./.dbconfig","./.dbconfig.bak")
+        open("./.dbconfig","w").close()
 
 def takeorderfunction():
 

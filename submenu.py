@@ -90,6 +90,23 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
+        self.thetext=[]
+        self.thetext.insert(2,"")
+        try:
+            config = open('.dbconfig.bak', 'r').read()
+            for i in config.splitlines():
+                self.thetext.insert(0,i)
+            if self.thetext[2] != "":
+                self.thetext[2], self.thetext[0] = self.thetext[0], self.thetext[2]
+                self.thetext[1], self.thetext[0] = self.thetext[0], self.thetext[1]
+        except Exception as e:
+            print("laterz")
+
+        else:
+            self.line_Host.setText(self.thetext[1])
+            self.line_User.setText(self.thetext[0])
+            self.line_Password.setText(self.thetext[2])
+
         Dialog.setWindowTitle(_translate("Dialog", "Connect Restaurant DB", None))
         self.label_Host.setText(_translate("Dialog", "Host", None))
         self.label_User.setText(_translate("Dialog", "User", None))
