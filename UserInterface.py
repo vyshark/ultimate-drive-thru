@@ -115,7 +115,8 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.calltakeorder)   #BUTTON CLICK ACTION
         QtCore.QObject.connect(self.actionDatabase_Config,QtCore.SIGNAL("activated()"),self.test)
-        self.logicthread=logicthread()  
+        self.logicthread=logicthread()
+        self.contactchef = contactchef()
         QtCore.QObject.connect(self.actionRestart, QtCore.SIGNAL(_fromUtf8("activated()")), self.reload)                                                                     #INITIATING THREAD
         QtCore.QObject.connect(self.logicthread,SIGNAL("logicthreaddone"),self.logicthreaddone)  #Connecting to Custom Signal->Slot
         QtCore.QObject.connect(self.logicthread, SIGNAL("logicthreadreceipt"), self.logicthreadreceipt)
@@ -246,25 +247,21 @@ class Ui_MainWindow(object):
 
     def logicthreaddone(self,message):
         print(message)
+        if message=="order cancelled.":
+            self.pushButton.setEnabled(True)
         self.messagebox.setText(message)
 
 
     def logicthreadreceipt(self,message):
         #receipt
 
-        receipt=QtGui.QDialog()
+        self.receipt=QtGui.QDialog()
         r = Ui_receiptDialog()
-        r.setupUi(receipt,message,self.creds)
+        r.setupUi(self.receipt,message,self.creds)
         self.pushButton.setEnabled(True)
-        receipt.show()
+        self.receipt.show()
+        self.contactchef.start()
 
-        s = socket.socket()
-        host = "localhost"
-        port = 12345
-
-        s.connect((host, port))
-        print(s.recv(1024))
-        s.close()
 
 
     def test(self):
@@ -287,6 +284,18 @@ class logicthread(QThread):
         except IndexError:
             finmess="order cancelled."
             self.emit(SIGNAL("logicthreaddone"), finmess)
+
+
+class contactchef(QThread):
+    def __init__(self,parent=None):
+        super(contactchef,self).__init__(parent)
+    def run(self):
+        s = socket.socket()
+        host = "localhost"
+        port = 12345
+        s.connect((host, port))
+        print(s.recv(1024))
+        s.close()
 
 
 
